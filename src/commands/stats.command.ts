@@ -95,7 +95,7 @@ export default {
       const { threads } = await channel.threads.fetch()
       for (const [, thread] of threads) {
         const text = await processChannel(thread)
-        if (text) fields.push({ name: channel.name, value: text })
+        if (text) fields.push({ name: thread.name, value: text })
       }
 
       const text = await processChannel(channel)
