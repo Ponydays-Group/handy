@@ -1,5 +1,10 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { BaseCommandInteraction, MessageEmbed, TextChannel } from 'discord.js'
+import {
+  BaseCommandInteraction,
+  MessageEmbed,
+  TextChannel,
+  ThreadChannel,
+} from 'discord.js'
 import { DateTime } from 'luxon'
 
 export default {
@@ -29,7 +34,7 @@ export default {
 
     let totalMsgs = 0
 
-    const processChannel = async (channel: TextChannel) => {
+    const processChannel = async (channel: TextChannel | ThreadChannel) => {
       let before: string
       let loop = true
 
@@ -87,8 +92,13 @@ export default {
     for (const [, channel] of channels) {
       if (channel.type !== 'GUILD_TEXT') continue
 
-      const text = await processChannel(channel)
+      const { threads } = await channel.threads.fetch()
+      for (const [, thread] of threads) {
+        const text = await processChannel(thread)
+        if (text) fields.push({ name: channel.name, value: text })
+      }
 
+      const text = await processChannel(channel)
       if (text) fields.push({ name: channel.name, value: text })
     }
 
