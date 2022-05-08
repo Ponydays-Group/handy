@@ -1,11 +1,14 @@
 import { Client, Intents } from 'discord.js'
 
+import deploy from './deploy-commands'
 import getCommands from './get-commands'
 
 require('dotenv').config()
 ;(async () => {
   const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
   const commands = await getCommands()
+
+  await deploy(commands)
 
   client.once('ready', () => {
     console.log('Ready!')

@@ -3,7 +3,7 @@ import { Collection } from 'discord.js'
 
 const fs = require('fs')
 
-export default async () => {
+export default async (): Promise<Commands> => {
   const commands = new Collection<string, Command>()
   const commandFiles = fs
     .readdirSync('./src/commands')
@@ -23,3 +23,4 @@ export interface Command {
   data: SlashCommandBuilder
   execute: (interaction: any) => Promise<any>
 }
+export type Commands = Collection<string, Command>
